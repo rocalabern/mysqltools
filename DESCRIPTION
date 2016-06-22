@@ -1,0 +1,13 @@
+Package: mysqltools
+Type: Package
+Title: Tools for MySQL
+Version: 1.0
+Date: 2016-22-07
+Author: Roc Alabern
+Maintainer: Roc Alabern <roc.alabern@gmail.com>
+Description: Tools for MySQL
+License: GPL (>= 3)
+Imports:
+    RMySQL,
+    DBI
+RoxygenNote: 5.0.1
