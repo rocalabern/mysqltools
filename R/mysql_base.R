@@ -65,7 +65,7 @@ ms.Query <- function(ch, query, asDataTable=mysqltools:::as.data.table.output, l
   if (isSelect(query)) {
     if (limit>=0) query = paste0(query," limit ",limit)
     res <- DBI::dbSendQuery(ch, query)
-    df <- DBI::dbFetch(res)
+    df <- DBI::dbFetch(res, n=-1)
     DBI::dbClearResult(res)
   } else {
     DBI::dbSendQuery(ch, query)

@@ -15,7 +15,7 @@ ms.showSchemas <- function (
   multiplelines.message(paste0("[Query Input]:\n \tSHOW DATABASES \n"))
   timer = proc.time()
   res = DBI::dbSendQuery(ch, "SHOW DATABASES")
-  df <- DBI::dbFetch(res)
+  df <- DBI::dbFetch(res, n=-1)
   DBI::dbClearResult(res)
   timer = round(proc.time() - timer)
   message(paste0("[Query Output] Ok: 0 rows returned.\n"))
