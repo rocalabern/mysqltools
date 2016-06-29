@@ -21,7 +21,6 @@ isSelect <- function(text) {
   return (substr(text, 1, 6) == "select")
 }
 
-
 #' @title ms.connect
 #' @export
 ms.connect <- function (
@@ -36,6 +35,8 @@ ms.connect <- function (
   
   drv <- RMySQL::MySQL()
   
+  multiplelines.message(paste0("[Query Time]: ",format(Sys.time(), "%Y%m%d_%H_%M_%S"),"\n"))
+  multiplelines.message(paste0("[Query Input]:\n Connect \n"))
   ch <- RMySQL::dbConnect(
     drv, 
     user = user, 
@@ -44,15 +45,30 @@ ms.connect <- function (
     default.file = ssl_ca_params)
   
   if (!is.null(schema)) {
+    multiplelines.message(paste0("[Query Time]: ",format(Sys.time(), "%Y%m%d_%H_%M_%S"),"\n"))
+    multiplelines.message(paste0("[Query Input]:\n USE ",schema," \n"))
     DBI::dbSendQuery(ch, paste0("use ", schema))
   }
   
   return(ch)
 }
 
+#' @title ms.Use
+#' @export
+ms.Use <- function (
+  ch,
+  schema
+) {
+  multiplelines.message(paste0("[Query Time]: ",format(Sys.time(), "%Y%m%d_%H_%M_%S"),"\n"))
+  multiplelines.message(paste0("[Query Input]:\n USe ",schema," \n"))
+  DBI::dbSendQuery(ch, paste0("use ", schema))
+}
+
 #' @title ms.close
 #' @export
 ms.close <- function (ch = ch) {
+  multiplelines.message(paste0("[Query Time]: ",format(Sys.time(), "%Y%m%d_%H_%M_%S"),"\n"))
+  multiplelines.message(paste0("[Query Input]:\n Close Connection \n"))
   DBI::dbDisconnect(ch)
 }
 

@@ -3,6 +3,7 @@
 export(db.Table.Info)
 export(ms.ExistTable)
 export(ms.Query)
+export(ms.Use)
 export(ms.close)
 export(ms.colnames)
 export(ms.connect)
