@@ -1,6 +1,5 @@
-source("C:/Alabern/Data/ConnData/init_conndata.R")
-
-# RMySQL ----
+# source("C:/Alabern/Data/ConnData/init_conndata.R")
+digorig::do.init()
 library(RMySQL)
 
 mydb = RMySQL::dbConnect(

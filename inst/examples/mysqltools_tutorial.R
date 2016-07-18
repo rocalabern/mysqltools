@@ -1,9 +1,7 @@
-source("C:/Alabern/Data/ConnData/init_conndata.R")
-
-# mysqltools ----
+# source("C:/Alabern/Data/ConnData/init_conndata.R")
+digorig::do.init()
 library(mysqltools)
 
-ms.close(ch)
 ch = ms.connect(host=connData$db_mysql_ip)
 ch = ms.connect(host=connData$db_mysql_ip, schema=connData$db_mysql_schema)
 
@@ -26,3 +24,5 @@ ms.colnames(ch, "table1")
 
 ms.colnames(ch, "schema_name_1.table1")
 ms.colnames(ch, "schema_name_2.table2")
+
+ms.close(ch)
