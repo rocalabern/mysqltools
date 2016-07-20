@@ -106,6 +106,20 @@ ms.Query <- function(ch, query, asDataTable=mysqltools:::as.data.table.output, l
   }
 }
 
+#' @title ms.ClearResults
+#' @export
+ms.ClearResults <- function(ch) {
+  tryCatch({
+    listResults = dbListResults(ch)
+    if (length(listResults)>0) {
+      message(paste0("[Clearing...]"))
+      DBI::dbClearResult(dbListResults(ch)[[1]])
+      message(paste0("[Cleared]"))
+    }
+  }, error = function(e) {message(e)})
+  invisible(NULL)
+}
+
 #' @title db.Table.Info
 #' @export
 db.Table.Info <- function(ch, strTable) {
