@@ -80,7 +80,9 @@ ms.Query <- function(ch, query, asDataTable=mysqltools:::as.data.table.output, l
   timer = proc.time()
   if (isSelect(query)) {
     if (limit>=0) query = paste0(query," limit ",limit)
+    suppressWarnings({
     res <- DBI::dbSendQuery(ch, query)
+    })
     df <- DBI::dbFetch(res, n=-1)
     DBI::dbClearResult(res)
   } else {
