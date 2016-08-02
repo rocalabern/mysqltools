@@ -74,10 +74,13 @@ ms.close <- function (ch = ch) {
 
 #' @title ms.Query
 #' @export
-ms.Query <- function(ch, query, asDataTable=mysqltools:::as.data.table.output, limit=-1) {
+ms.Query <- function(ch, query, asDataTable=mysqltools:::as.data.table.output, clearResulset=mysqltools:::clear.resulset, limit=-1) {
   multiplelines.message(paste0("[Query Time]: ",format(Sys.time(), "%Y%m%d_%H_%M_%S"),"\n"))
   multiplelines.message(paste0("[Query Input]:\n",query,"\n"))
   timer = proc.time()
+  if (clearResulset) {
+    ms.ClearResults(ch)
+  }
   if (isSelect(query)) {
     if (limit>=0) query = paste0(query," limit ",limit)
     suppressWarnings({

@@ -2,6 +2,8 @@
 
 as.data.table.output = TRUE
 
+clear.resulset = TRUE
+
 numericTypes <- c("tinyint", "int",
                   "integer", "numeric")
 categoricalTypes <- c("text", "varchar", "varchar(255)", "datetime", "date", 
@@ -31,8 +33,14 @@ setVar <- function (var, value) {
   lockBinding(var, env = asNamespace('mysqltools'))
 }
 
-#' @title ms.setParamAsDataTableOutput
+#' @title ms.setParam.AsDataTableOutput
 #' @export
-ms.setParamAsDataTableOutput <- function (bool) {
+ms.setParam.AsDataTableOutput <- function (bool) {
   setVar("as.data.table.output", bool)
+}
+
+#' @title ms.setParam.ClearResulset
+#' @export
+ms.setParam.ClearResulset <- function (bool) {
+  setVar("clear.resulset", bool)
 }
