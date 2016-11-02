@@ -50,6 +50,10 @@ ms.connect <- function (
     DBI::dbSendQuery(ch, paste0("use ", schema))
   }
   
+  if (tolower(Sys.info()['sysname']) != "windows") {
+    dbGetQuery(ch,'SET NAMES utf8')
+  }
+  
   return(ch)
 }
 
