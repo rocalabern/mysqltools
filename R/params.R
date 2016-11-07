@@ -1,5 +1,7 @@
 # roxygen2::roxygenise()
 
+use_JDBC = TRUE
+
 as.data.table.output = TRUE
 
 clear.resulset = TRUE
@@ -43,4 +45,10 @@ ms.setParam.AsDataTableOutput <- function (bool) {
 #' @export
 ms.setParam.ClearResulset <- function (bool) {
   setVar("clear.resulset", bool)
+}
+
+#' @title ms.setParam.JDBC
+#' @export
+ms.setParam.JDBC <- function (bool) {
+  setVar("use_JDBC", bool)
 }

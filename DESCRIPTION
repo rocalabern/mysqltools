@@ -1,7 +1,7 @@
 Package: mysqltools
 Type: Package
 Title: Tools for MySQL
-Version: 1.0
+Version: 1.0.1
 Date: 2016-22-07
 Author: Roc Alabern
 Maintainer: Roc Alabern <roc.alabern@gmail.com>

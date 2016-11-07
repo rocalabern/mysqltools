@@ -1,4 +1,3 @@
-# source("C:/Alabern/Data/ConnData/init_conndata.R")
 digorig::do.init()
 library(mysqltools)
 

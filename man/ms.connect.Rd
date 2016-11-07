@@ -5,6 +5,9 @@
 \title{ms.connect}
 \usage{
 ms.connect(host, schema = NULL, user = connData$IAM_user,
-  pass = connData$IAM_pass, ssl_ca_params = connData$db_mysql_ssl_ca_params)
+  pass = connData$IAM_pass, ssl_ca_params = connData$db_mysql_ssl_ca_params,
+  use_ssl = !is.null(connData$db_mysql_ssl_ca_params),
+  jar = system.file("java", "mysql-connector-java-5.1.40-bin.jar", package =
+  "mysqltools"))
 }
 

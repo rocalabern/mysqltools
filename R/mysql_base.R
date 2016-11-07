@@ -28,28 +28,45 @@ ms.connect <- function (
   schema = NULL,
   user = connData$IAM_user, 
   pass = connData$IAM_pass,
-  ssl_ca_params = connData$db_mysql_ssl_ca_params
+  ssl_ca_params = connData$db_mysql_ssl_ca_params,
+  use_ssl = !is.null(connData$db_mysql_ssl_ca_params),
+  jar = system.file("java", "mysql-connector-java-5.1.40-bin.jar", package = "mysqltools")
 ) {
-  library(RMySQL)
   library(DBI)
-  
-  drv <- RMySQL::MySQL()
-  
   multiplelines.message(paste0("[Query Time]: ",format(Sys.time(), "%Y%m%d_%H_%M_%S"),"\n"))
   multiplelines.message(paste0("[Query Input]:\n Connect \n"))
-  ch <- RMySQL::dbConnect(
-    drv, 
-    user = user, 
-    password = pass, 
-    host = host,
-    default.file = ssl_ca_params)
-  
+  if (use_JDBC) {
+    library(RJDBC)
+    
+    strParams = ""
+    if (use_ssl) strParams = paste0("?verifyServerCertificate=false&useSSL=true&requireSSL=true")
+    
+    drv <- JDBC(
+      "com.mysql.jdbc.Driver",
+      jar)
+    
+    ch <- dbConnect(
+      drv, 
+      url = paste0("jdbc:mysql://",connData$db_mysql_pmt_ip,":",connData$db_mysql_pmt_port,"/",connData$db_mysql_pmt_schema,strParams), 
+      user = user,
+      pass = pass)
+  } else {
+    library(RMySQL)
+    
+    drv <- RMySQL::MySQL()
+    
+    ch <- RMySQL::dbConnect(
+      drv, 
+      user = user, 
+      password = pass, 
+      host = host,
+      default.file = ssl_ca_params)
+  }
   if (!is.null(schema)) {
     multiplelines.message(paste0("[Query Time]: ",format(Sys.time(), "%Y%m%d_%H_%M_%S"),"\n"))
     multiplelines.message(paste0("[Query Input]:\n USE ",schema," \n"))
     DBI::dbSendQuery(ch, paste0("use ", schema))
   }
-  
   if (tolower(Sys.info()['sysname']) != "windows") {
     dbGetQuery(ch,'SET NAMES utf8')
   }

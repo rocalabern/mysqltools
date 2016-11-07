@@ -2,7 +2,7 @@
 digorig::do.init()
 library(RMySQL)
 
-mydb = RMySQL::dbConnect(
+ch = RMySQL::dbConnect(
   RMySQL::MySQL(), 
   user=connData$db_mysql_user, 
   password=connData$db_mysql_pass, 
@@ -14,8 +14,8 @@ df <- DBI::dbFetch(res)
 DBI::dbClearResult(res)
 df
 
-DBI::dbSendQuery(mydb, paste0("use ", connData$db_mysql_schema))
+DBI::dbSendQuery(ch, paste0("use ", connData$db_mysql_schema))
 
-DBI::dbListTables(mydb)
+DBI::dbListTables(ch)
 
-DBI::dbListFields(mydb, 'table1')
+DBI::dbListFields(ch, 'table1')
