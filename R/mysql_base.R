@@ -40,7 +40,7 @@ ms.connect <- function (
     library(RJDBC)
     
     strParams = ""
-    if (use_ssl) strParams = paste0("?verifyServerCertificate=false&useSSL=true&requireSSL=true")
+    if (use_ssl) strParams = paste0("?verifyServerCertificate=false&useSSL=true&requireSSL=true&useOldAliasMetadataBehavior=true")
     
     drv <- JDBC(
       "com.mysql.jdbc.Driver",
