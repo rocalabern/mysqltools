@@ -25,6 +25,7 @@ isSelect <- function(text) {
 #' @export
 ms.connect <- function (
   host,
+  port = "3306",
   schema = NULL,
   user = connData$IAM_user, 
   pass = connData$IAM_pass,
@@ -47,7 +48,7 @@ ms.connect <- function (
     
     ch <- dbConnect(
       drv, 
-      url = paste0("jdbc:mysql://",connData$db_mysql_pmt_ip,":",connData$db_mysql_pmt_port,"/",connData$db_mysql_pmt_schema,strParams), 
+      url = paste0("jdbc:mysql://",host,":",port,"/",schema,strParams), 
       user = user,
       pass = pass)
   } else {
@@ -61,16 +62,15 @@ ms.connect <- function (
       password = pass, 
       host = host,
       default.file = ssl_ca_params)
+    if (tolower(Sys.info()['sysname']) != "windows") {
+      dbGetQuery(ch,'SET NAMES utf8')
+    }
   }
   if (!is.null(schema)) {
     multiplelines.message(paste0("[Query Time]: ",format(Sys.time(), "%Y%m%d_%H_%M_%S"),"\n"))
     multiplelines.message(paste0("[Query Input]:\n USE ",schema," \n"))
     DBI::dbSendQuery(ch, paste0("use ", schema))
   }
-  if (tolower(Sys.info()['sysname']) != "windows") {
-    dbGetQuery(ch,'SET NAMES utf8')
-  }
-  
   return(ch)
 }
 
