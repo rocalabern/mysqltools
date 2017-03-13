@@ -18,7 +18,7 @@ multiplelines.message <- function (strText) {
 
 isSelect <- function(text) {
   text = simplifyText(text)
-  return (substr(text, 1, 6) == "select")
+  return ((substr(text, 1, 6) == "select") || (text == "show tables") || (text == "show schemas"))
 }
 
 #' @title ms.connect
@@ -90,7 +90,7 @@ ms.Use <- function (
 ms.close <- function (ch = ch) {
   if (use_log) multiplelines.message(paste0("[Query Time]: ",format(Sys.time(), "%Y%m%d_%H_%M_%S"),"\n"))
   if (use_log) multiplelines.message(paste0("[Query Input]:\n Close Connection \n"))
-  DBI::dbDisconnect(ch)
+  invisible(DBI::dbDisconnect(ch))
 }
 
 #' @title ms.Query
@@ -146,80 +146,4 @@ ms.ClearResults <- function(ch) {
     }
   }, error = function(e) {warning(e)})
   invisible(NULL)
-}
-
-#' @title db.Table.Info
-#' @export
-db.Table.Info <- function(ch, strTable) {
-  strSQL = paste0("select * from ", strTable)
-  result <- ms.Query(ch, strSQL, limit=1)
-  listAllVariables <- colnames(result)
-  listAllType <- sapply(result, class) # apply(result, 2, class)
-  nvar = length(listAllVariables)
-  
-  tableSplited = strsplit(strTable, ".", fixed = TRUE)[[1]]
-  if (length(tableSplited)>1) {
-    strTableSchema = tableSplited[1]
-    strTableName = paste(tableSplited[-1], collapse=".")
-  } else {
-    strTableSchema = ""
-    strTableName = strTable
-  }
-
-  listTYPENAME = listAllType
-  listTYPENAME[listTYPENAME=="logical"] = "smallint"
-  listTYPENAME[listTYPENAME=="integer"] = "integer"
-  listTYPENAME[listTYPENAME=="numeric"] = "numeric"
-  listTYPENAME[listTYPENAME=="character"] = "varchar"
-  listTYPENAME[listTYPENAME=="factor"] = "varchar"
-  info = data.frame(
-    TABLE_CAT = character(nvar),
-    TABLE_SCHEM = rep(strTableSchema, nvar),
-    TABLE_NAME = rep(strTableName, nvar),
-    COLUMN_NAME = listAllVariables,
-    DATA_TYPE = integer(nvar),
-    TYPE_NAME = listTYPENAME,
-    COLUMN_SIZE = integer(nvar),
-    BUFFER_LENGTH = integer(nvar),
-    DECIMAL_DIGITS = integer(nvar),
-    NUM_PREC_RADIX = integer(nvar),
-    NULLABLE = integer(nvar),
-    REMARKS = character(nvar),
-    COLUMN_DEF = character(nvar),
-    SQL_DATA_TYPE = integer(nvar),
-    SQL_DATETIME_SUB = integer(nvar),
-    CHAR_OCTET_LENGTH = integer(nvar),
-    ORDINAL_POSITION = integer(nvar),
-    IS_NULLABLE = character(nvar)
-  )
-  primaryKeys = data.frame(
-    TABLE_CAT = character(),
-    TABLE_SCHEM = character(),
-    TABLE_NAME = character(),
-    COLUMN_NAME = character(),
-    KEY_SEQ = integer(),
-    PK_NAME = character()
-  )
-
-  listCategorical <- character()
-  listNumeric <- character()
-  for (i in 1:nvar) {
-    strVar = listAllVariables[i]
-    if (info$TYPE_NAME[i] %in% categoricalTypes) {
-      listCategorical <- c(listCategorical, strVar)
-    }
-    if (info$TYPE_NAME[i] %in% numericTypes) {
-      listNumeric <- c(listNumeric, strVar)
-    }
-  }
-  return (list(
-    table = strTable,
-    info = info,
-    primaryKeys = primaryKeys,
-    listAllVariables = listAllVariables,
-    listAllType = listAllType,
-    listCategorical = listCategorical,
-    listNumeric = listNumeric,
-    nvar = nvar
-  ))
 }
