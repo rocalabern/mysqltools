@@ -1,9 +1,8 @@
 # roxygen2::roxygenise()
 
+use_log = TRUE
 use_JDBC = TRUE
-
 as.data.table.output = TRUE
-
 clear.resulset = TRUE
 
 numericTypes <- c("tinyint", "int",
@@ -51,4 +50,10 @@ ms.setParam.ClearResulset <- function (bool) {
 #' @export
 ms.setParam.JDBC <- function (bool) {
   setVar("use_JDBC", bool)
+}
+
+#' @title ms.setParam.Log
+#' @export
+ms.setParam.Log <- function (bool) {
+  setVar("use_log", bool)
 }

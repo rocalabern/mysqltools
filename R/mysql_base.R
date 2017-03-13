@@ -10,8 +10,8 @@ simplifyText <- function(text) {
 }
 
 multiplelines.message <- function (strText) {
-  #   writeLines(strwrap(strText, width=73))
-#   strText = unlist(strsplit(strText, "\r\n"))
+  # writeLines(strwrap(strText, width=73))
+  # strText = unlist(strsplit(strText, "\r\n"))
   strText = unlist(strsplit(strText, "\n"))
   for (line in strText) message(line)
 }
@@ -34,8 +34,8 @@ ms.connect <- function (
   jar = system.file("java", "mysql-connector-java-5.1.40-bin.jar", package = "mysqltools")
 ) {
   library(DBI)
-  multiplelines.message(paste0("[Query Time]: ",format(Sys.time(), "%Y%m%d_%H_%M_%S"),"\n"))
-  multiplelines.message(paste0("[Query Input]:\n Connect \n"))
+  if (use_log) multiplelines.message(paste0("[Query Time]: ",format(Sys.time(), "%Y%m%d_%H_%M_%S"),"\n"))
+  if (use_log) multiplelines.message(paste0("[Query Input]:\n Connect \n"))
   if (use_JDBC) {
     library(RJDBC)
     
@@ -67,8 +67,8 @@ ms.connect <- function (
     }
   }
   if (!is.null(schema)) {
-    multiplelines.message(paste0("[Query Time]: ",format(Sys.time(), "%Y%m%d_%H_%M_%S"),"\n"))
-    multiplelines.message(paste0("[Query Input]:\n USE ",schema," \n"))
+    if (use_log) multiplelines.message(paste0("[Query Time]: ",format(Sys.time(), "%Y%m%d_%H_%M_%S"),"\n"))
+    if (use_log) multiplelines.message(paste0("[Query Input]:\n USE ",schema," \n"))
     DBI::dbSendQuery(ch, paste0("use ", schema))
   }
   return(ch)
@@ -80,24 +80,24 @@ ms.Use <- function (
   ch,
   schema
 ) {
-  multiplelines.message(paste0("[Query Time]: ",format(Sys.time(), "%Y%m%d_%H_%M_%S"),"\n"))
-  multiplelines.message(paste0("[Query Input]:\n USe ",schema," \n"))
+  if (use_log) multiplelines.message(paste0("[Query Time]: ",format(Sys.time(), "%Y%m%d_%H_%M_%S"),"\n"))
+  if (use_log) multiplelines.message(paste0("[Query Input]:\n USe ",schema," \n"))
   DBI::dbSendQuery(ch, paste0("use ", schema))
 }
 
 #' @title ms.close
 #' @export
 ms.close <- function (ch = ch) {
-  multiplelines.message(paste0("[Query Time]: ",format(Sys.time(), "%Y%m%d_%H_%M_%S"),"\n"))
-  multiplelines.message(paste0("[Query Input]:\n Close Connection \n"))
+  if (use_log) multiplelines.message(paste0("[Query Time]: ",format(Sys.time(), "%Y%m%d_%H_%M_%S"),"\n"))
+  if (use_log) multiplelines.message(paste0("[Query Input]:\n Close Connection \n"))
   DBI::dbDisconnect(ch)
 }
 
 #' @title ms.Query
 #' @export
 ms.Query <- function(ch, query, asDataTable=mysqltools:::as.data.table.output, clearResulset=mysqltools:::clear.resulset, limit=-1) {
-  multiplelines.message(paste0("[Query Time]: ",format(Sys.time(), "%Y%m%d_%H_%M_%S"),"\n"))
-  multiplelines.message(paste0("[Query Input]:\n",query,"\n"))
+  if (use_log) multiplelines.message(paste0("[Query Time]: ",format(Sys.time(), "%Y%m%d_%H_%M_%S"),"\n"))
+  if (use_log) multiplelines.message(paste0("[Query Input]:\n",query,"\n"))
   timer = proc.time()
   if (clearResulset) {
     ms.ClearResults(ch)
@@ -118,11 +118,11 @@ ms.Query <- function(ch, query, asDataTable=mysqltools:::as.data.table.output, c
     if (sum(nchar(df))>0)
       warning(paste0("[Query Output] Error:\n",paste0(df, collapse="\n")))
     else
-      message(paste0("[Query Output] Ok: 0 rows returned.\n"))
+      if (use_log) message(paste0("[Query Output] Ok: 0 rows returned.\n"))
   } else {
-    message(paste0("[Query Output] Ok: ",nrow(df)," rows returned.\n"))
+    if (use_log) message(paste0("[Query Output] Ok: ",nrow(df)," rows returned.\n"))
   }
-  message(paste0("[Query Execution Time: ",timer[3]," seconds.]\n"))
+  if (use_log) message(paste0("[Query Execution Time: ",timer[3]," seconds.]\n"))
   if (class(df)=="character" && sum(nchar(df))==0) {
     invisible(NULL)
   } else if (asDataTable && class(df)!="character") {
@@ -139,12 +139,12 @@ ms.ClearResults <- function(ch) {
     if (class(ch) != "JDBCConnection") {
       listResults = dbListResults(ch)
       if (length(listResults)>0) {
-        message(paste0("[Clearing...]"))
+        if (use_log) message(paste0("[Clearing...]"))
         DBI::dbClearResult(dbListResults(ch)[[1]])
-        message(paste0("[Cleared]"))
+        if (use_log) message(paste0("[Cleared]"))
       }
     }
-  }, error = function(e) {message(e)})
+  }, error = function(e) {warning(e)})
   invisible(NULL)
 }
 

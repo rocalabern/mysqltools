@@ -11,15 +11,15 @@ ms.schema <- function(ch, schema) {
 ms.showSchemas <- function (
   ch
 ) {
-  multiplelines.message(paste0("[Query Time]: ",format(Sys.time(), "%Y%m%d_%H_%M_%S"),"\n"))
-  multiplelines.message(paste0("[Query Input]:\n \tSHOW DATABASES \n"))
+  if (use_log) multiplelines.message(paste0("[Query Time]: ",format(Sys.time(), "%Y%m%d_%H_%M_%S"),"\n"))
+  if (use_log) multiplelines.message(paste0("[Query Input]:\n \tSHOW DATABASES \n"))
   timer = proc.time()
   res = DBI::dbSendQuery(ch, "SHOW DATABASES")
   df <- DBI::dbFetch(res, n=-1)
   DBI::dbClearResult(res)
   timer = round(proc.time() - timer)
-  message(paste0("[Query Output] Ok: 0 rows returned.\n"))
-  message(paste0("[Query Execution Time: ",timer[3]," seconds.]\n"))
+  if (use_log) message(paste0("[Query Output] Ok: 0 rows returned.\n"))
+  if (use_log) message(paste0("[Query Execution Time: ",timer[3]," seconds.]\n"))
   
   df = data.frame(TABLE_SCHEM=df[[1]], stringsAsFactors = FALSE)
   return (df)
@@ -30,13 +30,13 @@ ms.showSchemas <- function (
 ms.showTables <- function (
   ch
 ) {
-  multiplelines.message(paste0("[Query Time]: ",format(Sys.time(), "%Y%m%d_%H_%M_%S"),"\n"))
-  multiplelines.message(paste0("[Query Input]:\n \tDBI::dbListTables \n"))
+  if (use_log) multiplelines.message(paste0("[Query Time]: ",format(Sys.time(), "%Y%m%d_%H_%M_%S"),"\n"))
+  if (use_log) multiplelines.message(paste0("[Query Input]:\n \tDBI::dbListTables \n"))
   timer = proc.time()
   df = DBI::dbListTables(ch)
   timer = round(proc.time() - timer)
-  message(paste0("[Query Output] Ok: 0 rows returned.\n"))
-  message(paste0("[Query Execution Time: ",timer[3]," seconds.]\n"))
+  if (use_log) message(paste0("[Query Output] Ok: 0 rows returned.\n"))
+  if (use_log) message(paste0("[Query Execution Time: ",timer[3]," seconds.]\n"))
   
   df = data.frame(TABLE_NAME=df, stringsAsFactors = FALSE)
   return (df)
@@ -99,13 +99,13 @@ ms.ExistTable <- function (ch, strTable) {
 #' @title ms.colnames
 #' @export
 ms.colnames <- function (ch, strTable) {
-  multiplelines.message(paste0("[Query Time]: ",format(Sys.time(), "%Y%m%d_%H_%M_%S"),"\n"))
-  multiplelines.message(paste0("[Query Input]:\n \tDBI::dbListFields \n"))
+  if (use_log) multiplelines.message(paste0("[Query Time]: ",format(Sys.time(), "%Y%m%d_%H_%M_%S"),"\n"))
+  if (use_log) multiplelines.message(paste0("[Query Input]:\n \tDBI::dbListFields \n"))
   timer = proc.time()
   res = DBI::dbListFields(ch, strTable)
   timer = round(proc.time() - timer)
-  message(paste0("[Query Output] Ok: 0 rows returned.\n"))
-  message(paste0("[Query Execution Time: ",timer[3]," seconds.]\n"))
+  if (use_log) message(paste0("[Query Output] Ok: 0 rows returned.\n"))
+  if (use_log) message(paste0("[Query Execution Time: ",timer[3]," seconds.]\n"))
   
   return (res)
 }
