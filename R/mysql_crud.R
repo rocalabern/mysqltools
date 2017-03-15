@@ -89,7 +89,10 @@ ms.Table.Read <- function (
   if (use_log) multiplelines.message(paste0("[Query Time]: ",format(Sys.time(), "%Y%m%d_%H_%M_%S"),"\n"))
   if (use_log) multiplelines.message(paste0("[Query Input]:\n Read ",strTable," table\n"))
   timer = proc.time()
-  df = DBI::dbReadTable(ch, strTable, ...)
+  # df = DBI::dbReadTable(ch, strTable, ...)
+  res <- DBI::dbSendQuery(ch, paste0("select * from ",strTable))
+  df <- DBI::dbFetch(res, n=-1)
+  DBI::dbClearResult(res)
   timer = round(proc.time() - timer)
   if (class(df)=="character") {
     if (sum(nchar(df))>0)
