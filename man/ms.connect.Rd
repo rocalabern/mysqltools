@@ -10,4 +10,3 @@ ms.connect(host, port = "3306", schema = NULL, user = connData$IAM_user,
   jar = system.file("java", "mysql-connector-java-5.1.40-bin.jar", package =
   "mysqltools"))
 }
-

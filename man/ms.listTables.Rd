@@ -6,4 +6,3 @@
 \usage{
 ms.listTables(ch, pattern = "", fixed = TRUE)
 }
-

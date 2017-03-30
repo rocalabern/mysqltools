@@ -6,4 +6,3 @@
 \usage{
 ms.Table.Exists(ch, strTable)
 }
-

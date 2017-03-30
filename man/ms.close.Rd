@@ -6,4 +6,3 @@
 \usage{
 ms.close(ch = ch)
 }
-

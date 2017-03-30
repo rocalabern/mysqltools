@@ -6,4 +6,3 @@
 \usage{
 ms.Table.Info(ch, strTable)
 }
-

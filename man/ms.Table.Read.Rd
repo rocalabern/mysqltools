@@ -7,4 +7,3 @@
 ms.Table.Read(ch, strTable, df,
   asDataTable = mysqltools:::as.data.table.output, ...)
 }
-

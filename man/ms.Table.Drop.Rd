@@ -6,4 +6,3 @@
 \usage{
 ms.Table.Drop(ch, strTable, check_exists = TRUE)
 }
-

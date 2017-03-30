@@ -6,4 +6,3 @@
 \usage{
 ms.schema(ch, schema)
 }
-

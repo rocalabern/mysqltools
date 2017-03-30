@@ -6,4 +6,3 @@
 \usage{
 ms.printTables(ch, pattern = "", fixed = TRUE)
 }
-

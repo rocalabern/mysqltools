@@ -6,4 +6,3 @@
 \usage{
 ms.setParam.JDBC(bool)
 }
-

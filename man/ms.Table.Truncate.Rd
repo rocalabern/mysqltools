@@ -6,4 +6,3 @@
 \usage{
 ms.Table.Truncate(ch, strTable, check_exists = TRUE)
 }
-

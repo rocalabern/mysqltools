@@ -6,4 +6,3 @@
 \usage{
 ms.colnames(ch, strTable)
 }
-

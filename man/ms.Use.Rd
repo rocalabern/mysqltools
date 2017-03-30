@@ -6,4 +6,3 @@
 \usage{
 ms.Use(ch, schema)
 }
-

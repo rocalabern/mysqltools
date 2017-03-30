@@ -7,4 +7,3 @@
 ms.Query(ch, query, asDataTable = mysqltools:::as.data.table.output,
   clearResulset = mysqltools:::clear.resulset, limit = -1)
 }
-

@@ -6,4 +6,3 @@
 \usage{
 ms.Table.Create(ch, strTable, df, dot_replacement = "_", ...)
 }
-

@@ -6,4 +6,3 @@
 \usage{
 ms.printSchemas(ch, showNumTables = TRUE)
 }
-

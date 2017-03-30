@@ -159,3 +159,70 @@ ms.Table.Append <- function (
   if (use_log) message(paste0("[Query Execution Time: ",timer[3]," seconds.]\n"))
   invisible(NULL)
 }
+
+#' @title ms.Table.ExportToCSV
+#' @export
+ms.Table.ExportToCSV <- function(
+  df,
+  strFile,
+  append = FALSE, 
+  quote = FALSE, 
+  sep = ";", 
+  row.names = FALSE, 
+  fileEncoding = "UTF-8",
+  check_doublequotes = quote,
+  check_semicolons = TRUE,
+  check_newlines = TRUE,
+  replacement = " "
+)
+{
+  if (check_doublequotes) {
+    for (col in colnames(df)) {
+      if (any(grepl("\"", df[[col]], fixed=FALSE))) {
+        warning(paste0(col, " : contains double quotes"))
+        df[[col]] = gsub("\"",replacement,df[[col]], fixed=FALSE)
+      }
+    }
+  }
+  if (check_semicolons) {
+    for (col in colnames(df)) {
+      if (any(grepl(";", df[[col]], fixed=FALSE))) {
+        warning(paste0(col, " : contains semicolon"))
+        df[[col]] = gsub(";",replacement,df[[col]], fixed=FALSE)
+      }
+    }
+  }
+
+  if (check_newlines) {
+    for (col in colnames(df)) {
+      if (any(grepl("\n", df[[col]], fixed=FALSE))) {
+        warning(paste0(col, " : contains new lines"))
+        df[[col]] = gsub("\r\n",replacement,df[[col]], fixed=FALSE)
+        df[[col]] = gsub("\n",replacement,df[[col]], fixed=FALSE)
+      }
+    }
+  }
+  write.table(df, file=strFile, append=append, quote=quote, sep=sep, row.names=row.names, fileEncoding=fileEncoding)
+  invisible(df)
+}
+
+#' @title ms.Table.LoadData
+#' @export
+ms.Table.LoadData <- function(
+  ch, 
+  strTable, 
+  strFile, 
+  encoding = "utf8", 
+  skip = 1 ,
+  sep = ";",
+  local = TRUE)
+{
+  if (local) strLocal = "LOCAL "
+  else strLocal = ""
+  ms.Query(ch, paste0(
+"LOAD DATA ",strLocal,"INFILE '",strFile,"'", " 
+INTO TABLE ",strTable," 
+  CHARACTER SET ",encoding," 
+  FIELDS TERMINATED BY '",sep,"'"," 
+  IGNORE ", skip," LINES "))
+}
