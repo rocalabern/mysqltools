@@ -5,7 +5,7 @@
 \title{ms.Table.ExportToCSV}
 \usage{
 ms.Table.ExportToCSV(df, strFile, append = FALSE, quote = FALSE,
-  sep = ";", row.names = FALSE, fileEncoding = "UTF-8",
-  check_doublequotes = quote, check_sep = TRUE, check_newlines = FALSE,
-  replacement = " ", na = "")
+  qmethod = "double", sep = ";", row.names = FALSE,
+  fileEncoding = "UTF-8", check_doublequotes = quote, check_sep = TRUE,
+  check_newlines = FALSE, replacement = " ", na = "")
 }

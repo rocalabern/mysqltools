@@ -5,5 +5,6 @@
 \title{ms.Table.LoadData}
 \usage{
 ms.Table.LoadData(ch, strTable, strFile, encoding = "utf8", skip = 1,
-  sep = ";", quote = FALSE, local = TRUE)
+  sep = ";", quote = FALSE, quote_char = "\\"", local = TRUE,
+  use_tag_null = NULL)
 }

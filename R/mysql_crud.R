@@ -167,6 +167,7 @@ ms.Table.ExportToCSV <- function(
   strFile,
   append = FALSE, 
   quote = FALSE, 
+  qmethod = "double",
   sep = ";", 
   row.names = FALSE, 
   fileEncoding = "UTF-8",
@@ -216,8 +217,24 @@ ms.Table.LoadData <- function(
   skip = 1 ,
   sep = ";",
   quote = FALSE,
-  local = TRUE)
+  quote_char = "\"",
+  local = TRUE,
+  use_tag_null = NULL)
 {
+  strQueryTagNull = ""
+  if (!is.null(use_tag_null)) {
+    if (local) {
+      if (quote) dfTable = data.table::fread(strFile, sep = sep, nrows = 1, quote = quote_char)
+      else dfTable = data.table::fread(strFile, sep = sep, nrows = 1, quote = "")
+      strQueryTagNull_first = paste0("(", paste0("@col", colnames(dfTable), collapse=", "), ")")
+      strQueryTagNull_second = paste0("SET \n", paste0(colnames(dfTable), " = nullif(@col", colnames(dfTable), ", '",use_tag_null,"')", collapse=",\n"))
+      strQueryTagNull = paste0(strQueryTagNull_first, strQueryTagNull_second)
+    } else {
+      warning("File is not local, so tag null cannot be used.")
+    }
+  }
+  
+  paste0()
   if (local) strLocal = "LOCAL "
   else strLocal = ""
   ms.Query(ch, paste0(
@@ -226,7 +243,8 @@ INTO TABLE ",strTable,"
   CHARACTER SET ",encoding," 
   FIELDS TERMINATED BY '",sep,"'","
   ",ifelse(quote, "ENCLOSED BY '\"'","" ),"
-  IGNORE ", skip," LINES "))
+  IGNORE ", skip," LINES ","
+  ",strQueryTagNull))
   
   
   
