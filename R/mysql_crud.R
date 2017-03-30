@@ -171,9 +171,10 @@ ms.Table.ExportToCSV <- function(
   row.names = FALSE, 
   fileEncoding = "UTF-8",
   check_doublequotes = quote,
-  check_semicolons = TRUE,
-  check_newlines = TRUE,
-  replacement = " "
+  check_sep = TRUE,
+  check_newlines = FALSE,
+  replacement = " ",
+  na = ""
 )
 {
   if (check_doublequotes) {
@@ -184,15 +185,14 @@ ms.Table.ExportToCSV <- function(
       }
     }
   }
-  if (check_semicolons) {
+  if (check_sep) {
     for (col in colnames(df)) {
-      if (any(grepl(";", df[[col]], fixed=FALSE))) {
-        warning(paste0(col, " : contains semicolon"))
-        df[[col]] = gsub(";",replacement,df[[col]], fixed=FALSE)
+      if (any(grepl(sep, df[[col]], fixed=FALSE))) {
+        warning(paste0(col, " : contains separator"))
+        df[[col]] = gsub(sep,replacement,df[[col]], fixed=FALSE)
       }
     }
   }
-
   if (check_newlines) {
     for (col in colnames(df)) {
       if (any(grepl("\n", df[[col]], fixed=FALSE))) {
@@ -202,7 +202,7 @@ ms.Table.ExportToCSV <- function(
       }
     }
   }
-  write.table(df, file=strFile, append=append, quote=quote, sep=sep, row.names=row.names, fileEncoding=fileEncoding)
+  write.table(df, file=strFile, append=append, quote=quote, sep=sep, row.names=row.names, fileEncoding=fileEncoding, na = na)
   invisible(df)
 }
 
@@ -215,6 +215,7 @@ ms.Table.LoadData <- function(
   encoding = "utf8", 
   skip = 1 ,
   sep = ";",
+  quote = FALSE,
   local = TRUE)
 {
   if (local) strLocal = "LOCAL "
@@ -223,6 +224,10 @@ ms.Table.LoadData <- function(
 "LOAD DATA ",strLocal,"INFILE '",strFile,"'", " 
 INTO TABLE ",strTable," 
   CHARACTER SET ",encoding," 
-  FIELDS TERMINATED BY '",sep,"'"," 
+  FIELDS TERMINATED BY '",sep,"'","
+  ",ifelse(quote, "ENCLOSED BY '\"'","" ),"
   IGNORE ", skip," LINES "))
+  
+  
+  
 }
