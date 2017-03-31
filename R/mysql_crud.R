@@ -77,6 +77,17 @@ ms.Table.Truncate <- function (
   invisible(NULL)
 }
 
+#' @title ms.Table.Delete
+#' @export
+ms.Table.Delete <- function(ch, strTable, WHERE_condition, strBooleanClause = "AND") {
+  WHERE_Clause = paste0(WHERE_condition, collapse =paste0(" ",strBooleanClause," \n"))
+  if( !grepl("where",tolower(WHERE_Clause)) ) { 
+    WHERE_Clause = paste0(" WHERE ", WHERE_Clause)
+  }
+  strSQL = paste0("DELETE FROM ", strTable ," ", WHERE_Clause)
+  ms.Query( ch, strSQL )
+}
+
 #' @title ms.Table.Read
 #' @export
 ms.Table.Read <- function (
@@ -245,7 +256,4 @@ INTO TABLE ",strTable,"
   ",ifelse(quote, "ENCLOSED BY '\"'","" ),"
   IGNORE ", skip," LINES ","
   ",strQueryTagNull))
-  
-  
-  
 }
