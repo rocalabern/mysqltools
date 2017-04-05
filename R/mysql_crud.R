@@ -85,7 +85,19 @@ ms.Table.Delete <- function(ch, strTable, WHERE_condition, strBooleanClause = "A
     WHERE_Clause = paste0(" WHERE ", WHERE_Clause)
   }
   strSQL = paste0("DELETE FROM ", strTable ," ", WHERE_Clause)
-  ms.Query( ch, strSQL )
+  if (use_log) {
+    multiplelines.message(paste0("[Query Time]: ",format(Sys.time(), "%Y%m%d_%H_%M_%S"),"\n"))
+    multiplelines.message(paste0("[Query Input]:\n",strSQL,"\n"))
+  }
+  timer = proc.time()
+  if (attr(class(ch), "package") == "RJDBC") {
+    RJDBC::dbSendUpdate(ch, strSQL)
+  } else {
+    DBI::dbExecute(ch, strSQL)
+  }
+  timer = round(proc.time() - timer)
+  if (use_log) message(paste0("[Query Execution Time: ",timer[3]," seconds.]\n"))
+  invisible(NULL)
 }
 
 #' @title ms.Table.Read
