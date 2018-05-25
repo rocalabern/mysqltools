@@ -105,7 +105,6 @@ ms.Table.Delete <- function(ch, strTable, WHERE_condition, strBooleanClause = "A
 ms.Table.Read <- function (
   ch,
   strTable, 
-  df,
   asDataTable = mysqltools:::as.data.table.output,
   ...
 ) {

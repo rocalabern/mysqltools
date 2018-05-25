@@ -147,3 +147,22 @@ ms.ClearResults <- function(ch) {
   }, error = function(e) {warning(e)})
   invisible(NULL)
 }
+
+#' @title ms.Update
+#' @export
+ms.Update <- function(ch, query, clearResulset=mysqltools:::clear.resulset) {
+  if (use_log) multiplelines.message(paste0("[Query Time]: ",format(Sys.time(), "%Y%m%d_%H_%M_%S"),"\n"))
+  if (use_log) multiplelines.message(paste0("[Query Input (update)]:\n",query,"\n"))
+  timer = proc.time()
+  if (clearResulset) {
+    ms.ClearResults(ch)
+  }
+  if (class(ch) == "JDBCConnection") {
+    func_query = RJDBC::dbSendUpdate(ch, query)
+  } else {
+    func_query = dbGetQuery(ch, query)
+  }
+  timer = round(proc.time() - timer)
+  if (use_log) message(paste0("[Query Execution Time: ",timer[3]," seconds.]\n"))
+  invisible(return(func_query))
+}
