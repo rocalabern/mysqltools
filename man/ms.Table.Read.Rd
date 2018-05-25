@@ -4,6 +4,6 @@
 \alias{ms.Table.Read}
 \title{ms.Table.Read}
 \usage{
-ms.Table.Read(ch, strTable, df,
-  asDataTable = mysqltools:::as.data.table.output, ...)
+ms.Table.Read(ch, strTable, asDataTable = mysqltools:::as.data.table.output,
+  ...)
 }
